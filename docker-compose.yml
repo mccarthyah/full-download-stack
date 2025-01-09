@@ -13,10 +13,10 @@ services:
       - /dev/net/tun:/dev/net/tun
     container_name: piawireguard
     environment:
-      - LOC=ca_toronto
-      - USER=p9798466
-      - PASS=nnEmPHTZ84
-      - LOCAL_NETWORK=10.10.0.0/16
+      - LOC=${PIALOC}
+      - USER=${PIAUSER}
+      - PASS=${PIAPASS}
+      - LOCAL_NETWORK=${PIALOCAL_NETWORK}
       - PORT_FORWARDING=1
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
@@ -44,10 +44,10 @@ services:
     container_name: deluge4vpn-stack
     network_mode: container:piawireguard
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Toronto
-      - UMASK=002
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - UMASK=${UMASK}
       - DELUGE_LOGLEVEL=error
     image: lscr.io/linuxserver/deluge:latest
     ipc: private
@@ -67,8 +67,8 @@ services:
     environment:
       - DELUGE_RPC_PORT=58846
       - DELUGE_RPC_VERSION=v2
-      - DELUGE_RPC_USERNAME=andrew
-      - DELUGE_RPC_PASSWORD=luigina
+      - DELUGE_RPC_USERNAME=${DELUGE_RPC_USERNAME}
+      - DELUGE_RPC_PASSWORD=${DELUGE_RPC_PASSWORD}
       - DELUGE_RPC_HOSTNAME=10.10.20.80
     image: ghcr.io/relvacode/storm:latest
     depends_on:
@@ -80,7 +80,7 @@ services:
     container_name: socks5
     network_mode: container:piawireguard
     environment:
-      - TZ=America/Toronto
+      - TZ=${TZ}
       - PROXY_PORT=1080
     restart: unless-stopped
     depends_on:
@@ -90,9 +90,9 @@ services:
   firefox:
     container_name: firefox-stack
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Toronto
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
     image: linuxserver/firefox:latest
     restart: unless-stopped
     volumes:
@@ -113,9 +113,9 @@ services:
     container_name: qbittorrent
     network_mode: container:piawireguard
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Toronto
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
       - WEBUI_PORT=8080
     volumes:
       - /srv/datastore/docker/qbittorrent:/config
@@ -129,7 +129,7 @@ services:
   qbittorrent-port-forward-file:
     container_name: qbittorrent-port-forward
     environment:
-      - QBT_USERNAME=admin
+      - QBT_USERNAME=${QBT_USERNAME}
       - QBT_PASSWORD=
       - QBT_ADDR=http://10.10.20.80:8080
       - PORT_FILE=/port-forward/port.dat
